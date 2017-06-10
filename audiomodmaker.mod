@@ -1,6 +1,8 @@
 name="Audio Mod Maker"
-path="mod/1"
+path="mod/audiomodmaker"
 tags={
+	"Sound"
 	"Music"
 }
-supported_version="1.21.*"
+picture="base.png"
+supported_version="1.21.*.*"
