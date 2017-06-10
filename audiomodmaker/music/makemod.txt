@@ -1,0 +1,33 @@
+####get file list
+
+import os, fnmatch
+
+#in case it changes, maybe with input
+filetype = "ogg"
+
+#get list of files in WD
+files = os.listdir(.)
+
+#filter list -> we need filetype Files
+songs = fnmatch.filter(files, '*.'+filetype)
+
+#remove filetype, this can probably done in a better way
+songs = [i.replace('.'+filetype, "") for i in songs]
+
+#test list creations
+print(files)
+print(songs)
+
+##### create asset file
+asset = open('music.asset', 'w')
+for i in songs:
+    asset.write('music = {\n' + '    name = "' + i + '"\n' + '    file = "' +
+                i + '.' + filetype + '"' + '\n' + '}' + '\n')
+asset.close()
+
+#### create songs.txt
+songtxt = open('songs.txt', 'w')
+for i in songs:
+    songtxt.write('song = {\n' + '    name ="' + i + '"\n' + '    chance = {\n' +
+                  '		modifier = {\n' + '			factor = 1\n' + '		}\n' + '	}\n' + '}\n\n\n')
+songtxt.close()
