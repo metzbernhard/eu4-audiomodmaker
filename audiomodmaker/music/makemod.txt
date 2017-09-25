@@ -14,14 +14,14 @@ filetype = "ogg"
 # and https://docs.python.org/2/library/string.html#format-string-syntax
 asset_template = """
 music = {{
-  name = {song}
-  file = {song}.ogg
+  name = "{song}"
+  file = "{song}.ogg"
 }}
 """
 
 song_template = """
 song = {{
-  name = {song}
+  name = "{song}"
   chance = {{
     modifier = {{
       factor = 1
