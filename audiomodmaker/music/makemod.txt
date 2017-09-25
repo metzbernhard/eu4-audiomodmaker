@@ -1,36 +1,54 @@
-#########HOW TO USE ########
-#rename makemod.txt to makemod.py, copy the wanted music files in ogg format into the music folder with the .py file and then double click the makemod.py. Needs Python installed!
-
-####get file list
+######### HOW TO USE ########
+# rename makemod.txt to makemod.py, copy the wanted music files in ogg
+# format into the music folder with the .py file and then double click
+# the makemod.py. Needs Python installed!
+#############################
 
 import os, fnmatch
 
-#in case it changes, maybe with input
+# in case it changes, maybe with input
 filetype = "ogg"
 
-#get list of files in WD
+# the templates to use.
+# for details, see: http://www.eu4wiki.com/Music_modding
+# and https://docs.python.org/2/library/string.html#format-string-syntax
+asset_template = """
+music = {{
+  name = {song}
+  file = {song}.ogg
+}}
+"""
+
+song_template = """
+song = {{
+  name = {song}
+  chance = {{
+    modifier = {{
+      factor = 1
+    }}
+  }}
+}}
+"""
+
+# get list of files in WD
 files = os.listdir('.')
 
-#filter list -> we need filetype Files
-songs = fnmatch.filter(files, '*.'+filetype)
+# filter list -> we need filetype files
+songs = fnmatch.filter(files, '*.' + filetype)
 
-#remove filetype, this can probably done in a better way
-songs = [i.replace('.'+filetype, "") for i in songs]
+# listdir does not return a sorted list
+# but having the songs sorted will make life easier
+songs.sort()
 
-#test list creations
-print(files)
-print(songs)
+# remove filetype
+songs = [os.path.splitext(i)[0] for i in songs]
 
 ##### create asset file
-asset = open('music.asset', 'w')
-for i in songs:
-    asset.write('music = {\n' + '    name = "' + i + '"\n' + '    file = "' +
-                i + '.' + filetype + '"' + '\n' + '}' + '\n')
-asset.close()
+with open('music.asset', 'w') as asset:
+    for i in songs:
+        asset.write(asset_template.format(song = i))
 
 #### create songs.txt
-songtxt = open('songs.txt', 'w')
-for i in songs:
-    songtxt.write('song = {\n' + '    name ="' + i + '"\n' + '    chance = {\n' +
-                  '		modifier = {\n' + '			factor = 1\n' + '		}\n' + '	}\n' + '}\n\n\n')
-songtxt.close()
+with open('songs.txt', 'w') as songtxt:
+    for i in songs:
+        songtxt.write(song_template.format(song = i))
